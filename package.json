@@ -3,7 +3,7 @@
   "publisher": "SaurabhMulay",
   "displayName": "Salesforce Access Studio",
   "description": "Manage Salesforce directly from VS Code.",
-  "version": "0.0.7",
+  "version": "0.0.8",
   "icon": "icon1.png",
   "engines": {
     "vscode": "^1.125.0"
