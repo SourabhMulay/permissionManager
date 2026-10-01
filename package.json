@@ -1,10 +1,10 @@
 {
   "name": "permissionManager",
   "publisher": "SaurabhMulay",
-  "displayName": "Permission Manager",
-  "description": "Manage Salesforce Profile and Permission Set permissions directly from VS Code.",
-  "version": "0.0.4",
-  "icon": "icon.png",
+  "displayName": "Salesforce Access Studio",
+  "description": "Manage Salesforce directly from VS Code.",
+  "version": "0.0.5",
+  "icon": "icon1.png",
   "engines": {
     "vscode": "^1.125.0"
   },
