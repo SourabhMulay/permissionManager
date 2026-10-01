@@ -174,7 +174,7 @@ async function handleConnect() {
     try {
 
         const response = await fetch(
-            "/api/auth/login",
+            (window.API_BASE || "") + "/api/auth/login",
             {
                 method: "POST",
 
@@ -740,7 +740,7 @@ async function handleUpload() {
 
     progressPollInterval = setInterval(async () => {
         try {
-            const res = await fetch(`/api/files/upload/progress/${jobId}`);
+            const res = await fetch(`${window.API_BASE || ""}/api/files/upload/progress/${jobId}`);
             const data = await res.json();
 
             if (data.total > 0) {
@@ -776,7 +776,7 @@ async function handleUpload() {
             formData.append("visibility", state.relation.visibility);
         }
 
-        const response = await fetch("/api/files/upload", {
+        const response = await fetch((window.API_BASE || "") + "/api/files/upload", {
             method: "POST",
             body: formData
         });

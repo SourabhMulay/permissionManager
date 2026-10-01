@@ -2,6 +2,7 @@ const vscode = require('vscode');
 const { spawn } = require('child_process');
 const path = require('path');
 const fs = require('fs');
+const net = require('net');
 
 let backendProcess = null;
 let panel = null;
@@ -76,10 +77,16 @@ async function launchApp(context) {
 
             startBackend(backendDir, context);
 
-            // Give uvicorn a moment to start
-            await new Promise(resolve => setTimeout(resolve, 2000));
+            progress.report({ message: 'Waiting for server to be ready...' });
 
-            openWebview(indexHtmlPath, context);
+            try {
+                await waitForPort(8000);
+            } catch (err) {
+                vscode.window.showErrorMessage(`Backend failed to start: ${err.message}`);
+                return;
+            }
+
+            vscode.env.openExternal(vscode.Uri.parse('http://localhost:8000'));
         }
     );
 }
@@ -126,16 +133,44 @@ function installRequirements(backendDir) {
     return tryNext(0);
 }
 
+function waitForPort(port, timeout = 15000) {
+    return new Promise((resolve, reject) => {
+        const start = Date.now();
+        function attempt() {
+            const socket = new net.Socket();
+            socket.setTimeout(500);
+            socket.on('connect', () => { socket.destroy(); resolve(); });
+            socket.on('error', () => { socket.destroy(); retry(); });
+            socket.on('timeout', () => { socket.destroy(); retry(); });
+            socket.connect(port, '127.0.0.1');
+        }
+        function retry() {
+            if (Date.now() - start > timeout) {
+                reject(new Error(`Server did not start on port ${port} within ${timeout / 1000}s`));
+            } else {
+                setTimeout(attempt, 300);
+            }
+        }
+        attempt();
+    });
+}
+
 function startBackend(backendDir, context) {
     if (backendProcess) {
         return; // already running
     }
 
-    backendProcess = spawn('uvicorn', ['app.main:app', '--reload', '--port', '8000'], {
-        cwd: backendDir,
-        shell: true,
-        env: { ...process.env, PYTHONPATH: backendDir }
-    });
+    // Try `uvicorn` directly first; fall back to `python -m uvicorn`
+    const pythonCmd = process.platform === 'win32' ? 'python' : 'python3';
+    backendProcess = spawn(
+        pythonCmd,
+        ['-m', 'uvicorn', 'app.main:app', '--port', '8000'],
+        {
+            cwd: backendDir,
+            shell: true,
+            env: { ...process.env, PYTHONPATH: backendDir }
+        }
+    );
 
     const outputChannel = vscode.window.createOutputChannel('Permission Manager Backend');
     outputChannel.show(true);
@@ -182,7 +217,8 @@ function openWebview(indexHtmlPath, context) {
             enableScripts: true,
             localResourceRoots: [
                 vscode.Uri.file(path.dirname(indexHtmlPath))
-            ]
+            ],
+            retainContextWhenHidden: true
         }
     );
 
@@ -209,6 +245,13 @@ function buildWebviewHtml(indexHtmlPath, webview) {
             }
             return match;
         }
+    );
+
+    // Inject CSP and API base URL so fetch calls reach the local backend from inside the WebView
+    const cspSource = webview.cspSource;
+    html = html.replace(
+        '<head>',
+        `<head>\n<meta http-equiv="Content-Security-Policy" content="default-src 'none'; img-src ${cspSource} data: https:; script-src 'unsafe-inline' ${cspSource}; style-src 'unsafe-inline' ${cspSource}; connect-src http://localhost:8000;">\n<script>window.API_BASE = "http://localhost:8000";</script>`
     );
 
     return html;
