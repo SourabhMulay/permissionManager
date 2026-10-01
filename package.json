@@ -13,6 +13,10 @@
   ],
   "activationEvents": [],
   "main": "./extension.js",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/SaurabhMulay/PermissionManager.git"
+  },
   "contributes": {
     "commands": [
       {
