@@ -54,7 +54,7 @@
 
 ## Installation
 
-1. Download the `.vsix` file from the [Releases](https://github.com/SaurabhMulay/PermissionManager/releases) page.
+1. Download the `.vsix` file from the [Releases](https://github.com/SourabhMulay/PermissionManager/releases) page.
 2. Open VS Code → Command Palette (`Ctrl+Shift+P` / `Cmd+Shift+P`).
 3. Run **"Extensions: Install from VSIX..."** and select the downloaded file.
 4. Reload VS Code if prompted.
@@ -281,7 +281,7 @@ This extension is under active development. A lot is on the table — here are k
 This project is open to contributions, bug reports, and feature suggestions.
 
 **Have an idea or found a bug?**
-👉 [Open an issue on GitHub](https://github.com/SaurabhMulay/PermissionManager/issues)
+👉 [Open an issue on GitHub](https://github.com/SourabhMulay/PermissionManager/issues)
 
 We are especially interested in:
 - Feature requests for permission types not yet covered

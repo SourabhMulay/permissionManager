@@ -15,7 +15,7 @@
   "main": "./extension.js",
   "repository": {
     "type": "git",
-    "url": "https://github.com/SaurabhMulay/PermissionManager.git"
+    "url": "https://github.com/SourabhMulay/PermissionManager.git"
   },
   "contributes": {
     "commands": [
