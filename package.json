@@ -3,7 +3,7 @@
   "publisher": "SaurabhMulay",
   "displayName": "Permission Manager",
   "description": "Manage Salesforce Profile and Permission Set permissions directly from VS Code.",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "icon": "icon.png",
   "engines": {
     "vscode": "^1.125.0"
