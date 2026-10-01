@@ -3,7 +3,7 @@
   "publisher": "SaurabhMulay",
   "displayName": "Permission Manager",
   "description": "Manage Salesforce Profile and Permission Set permissions directly from VS Code.",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "icon": "icon.png",
   "engines": {
     "vscode": "^1.125.0"
@@ -14,10 +14,16 @@
   "activationEvents": [],
   "main": "./extension.js",
   "contributes": {
-    "commands": [{
-      "command": "permissionManager.updatePermissions",
-      "title": "Salesforce: Permission Manager"
-    }]
+    "commands": [
+      {
+        "command": "permissionManager.updatePermissions",
+        "title": "Salesforce: Permission Manager"
+      },
+      {
+        "command": "permissionManager.launchApp",
+        "title": "Salesforce: Launch Bulk File Uploader"
+      }
+    ]
   },
   "scripts": {
     "lint": "eslint .",
